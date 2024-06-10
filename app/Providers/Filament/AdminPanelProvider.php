@@ -6,6 +6,7 @@ use Filament\Forms\Components\Field;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -42,6 +43,21 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
+//            ->userMenuItems([
+////                if ($panel->getId() === 'admin') {
+////            return $this->hasRole(config('filament-shield.super_admin.name'));
+//                MenuItem::make()
+//                    ->label('App Panel')
+//                    ->visible(fn (): bool => auth()->user()->hasRole(config('filament-shield.super_admin.name')))
+//                    ->icon('heroicon-o-home')
+//                    ->url(url('/')),
+//
+//                MenuItem::make()
+//                    ->label('Dashboard')
+//                    ->visible(fn (): bool => auth()->user()->hasRole(config('filament-shield.super_admin.name')))
+//                    ->icon('heroicon-o-home')
+//                    ->url(url('/admin'))
+//            ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
