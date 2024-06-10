@@ -2,10 +2,14 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\App\Resources\CategoryResource;
+use App\Filament\App\Resources\SubcategoryResource;
 use Filament\Forms\Components\Field;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationBuilder;
+use Filament\Navigation\NavigationGroup;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -20,7 +24,7 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-class AdminPanelProvider extends PanelProvider
+class AppPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
@@ -34,20 +38,29 @@ class AdminPanelProvider extends PanelProvider
                     $column->translateLabel();
                 });
             })
-            ->default()
-            ->id('admin')
-            ->path('admin')
-            ->login()
+            ->id('app')
+            ->path('')
             ->profile()
+            ->login()
             ->colors([
                 'primary' => Color::Amber,
             ])
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
-            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+//            ->navigation(function (NavigationBuilder $builder): NavigationBuilder {
+//                return $builder->groups([
+//                    NavigationGroup::make('Catagorias/Subcatagorias')
+//                        ->items([
+//                            ...CategoryResource::getNavigationItems(),
+//                            ...SubcategoryResource::getNavigationItems(),
+//
+//                        ]),
+//                ]);
+//            })
+            ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\\Filament\\App\\Resources')
+            ->discoverPages(in: app_path('Filament/App/Pages'), for: 'App\\Filament\\App\\Pages')
             ->pages([
                 Pages\Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            ->discoverWidgets(in: app_path('Filament/App/Widgets'), for: 'App\\Filament\\App\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
             ])
@@ -64,9 +77,6 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ])
-            ->plugins([
-                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
             ]);
     }
 }

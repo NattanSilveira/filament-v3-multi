@@ -7,16 +7,11 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('documents', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->boolean('should_notify')->default(false);
-            $table->dateTime('notify_at')->nullable();
-            $table->json('emails_to_notify')->nullable();
-            $table->foreignId('category_id')->constrained();
-            $table->foreignId('subcategory_id')->constrained();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -24,6 +19,6 @@ return new class extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('documents');
+        Schema::dropIfExists('categories');
     }
 };
