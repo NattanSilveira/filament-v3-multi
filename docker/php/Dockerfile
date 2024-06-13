@@ -15,14 +15,17 @@ RUN apt-get update && apt-get install -y \
     gnupg2 \
     # Adiciona o Node.js e o Yarn
     nodejs \
-    npm
+    npm \
+    # Adiciona as dependências para intl e exif
+    libicu-dev \
+    libjpeg62-turbo-dev
 
 # Instala o Yarn
 RUN npm install --global yarn
 
 # Continua com as instalações anteriores...
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
-RUN docker-php-ext-install gd pdo pdo_mysql zip mbstring
+RUN docker-php-ext-install gd pdo pdo_mysql zip mbstring exif intl
 
 # Instala Redis
 RUN pecl install redis && docker-php-ext-enable redis
