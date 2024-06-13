@@ -35,4 +35,15 @@ class Document extends Model implements HasMedia
         return $this->belongsTo(Subcategory::class);
     }
 
+    public function getFilesCountAttribute(): int
+    {
+        return $this->media()->count();
+    }
+
+    public function getFilesSizeAttribute(): int
+    {
+
+        return $this->media()->sum('size');
+    }
+
 }

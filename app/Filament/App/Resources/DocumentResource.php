@@ -10,11 +10,16 @@ use App\Models\Subcategory;
 use Filament\Forms;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Number;
 
 class DocumentResource extends Resource
 {
@@ -22,7 +27,6 @@ class DocumentResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    //getmodellabel
     public static function getModelLabel(): string
     {
         return __('Document');
@@ -33,27 +37,30 @@ class DocumentResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
-                    ->label('Name')
+                    ->label('Nome')
                     ->required()
                     ->placeholder('Enter the name of the document')
                     ->columnSpanFull(),
+
                 Forms\Components\RichEditor::make('description')
-                    ->label('Description')
+                    ->label('Descrição')
                     ->required()
-                    ->placeholder('Enter the description of the document')
+                    ->placeholder('Insira a descrição do documento')
+//                    block image upload
+                    ->disableToolbarButtons([
+                        'attachFiles',
+                    ])
                     ->columnSpanFull(),
+
                 Forms\Components\Select::make('category_id')
-//                    ->relationship('category', 'name')
-//                    ->live()
-                    ->label('Category')
-//                    ->dehydrated(false)
+                    ->label('Categoria')
                     ->options(
                         Category::all()->pluck('name', 'id')
                     )
                     ->searchable()
                     ->required(),
+
                 Forms\Components\Select::make('subcategory_id')
-//                    ->relationship('subcategory', 'name')
                     ->label('Subcategory')
                     ->placeholder(fn (Forms\Get $get) => $get('category_id') ? 'Select a subcategory' : 'Select a category first')
                     ->options(
@@ -62,20 +69,24 @@ class DocumentResource extends Resource
                     ->searchable()
                     ->required(),
 
+                Forms\Components\DateTimePicker::make('expiration_date')
+                    ->label('Data de vencimento')
+                    ->nullable(),
+
                 Forms\Components\Toggle::make('should_notify')
-                    ->label('Should Notify')
+                    ->label('Habilitar notificação')
                     ->default(false)
                     ->reactive()  // Adiciona a reatividade ao toggle
                     ->columnSpanFull(),
 
                 Forms\Components\DateTimePicker::make('notify_at')
-                    ->label('Notify At')
+                    ->label('Data de notificação')
                     ->nullable()
                     ->visible(fn ($get) => $get('should_notify'))
                     ->reactive(),  // Adiciona a reatividade ao campo
 
                 Forms\Components\TagsInput::make('emails_to_notify')
-                    ->label('Emails To Notify')
+                    ->label('Emails para notificar')
                     ->nullable()
                     ->visible(fn ($get) => $get('should_notify'))
                     ->reactive()
@@ -86,9 +97,8 @@ class DocumentResource extends Resource
                         '*.email' => 'The email :input, must be a valid email address.',
                     ]),
 
-
                 SpatieMediaLibraryFileUpload::make('document_files')
-                    ->label('File')
+                    ->label('Arquivos')
                     ->multiple()
                     ->preserveFilenames()
                     ->disk('public')
@@ -97,6 +107,7 @@ class DocumentResource extends Resource
                     ->openable()
                     ->required()
                     ->columnSpanFull(),
+
                 Forms\Components\Hidden::make('user_id')
                     ->default(auth()->id()),
             ]);
@@ -106,17 +117,45 @@ class DocumentResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
+                    ->label('Nome')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('description')
+                IconColumn::make('should_notify')
+                    ->label('Notificação')
+                    ->trueColor('success')
+                    ->falseColor('danger')
+                    ->boolean(),
+                TextColumn::make('expiration_date')
+                    ->label('Data de vencimento')
                     ->searchable()
+                    ->dateTime('d/m/Y H:i')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+//                TextColumn::make('files_count')
+//                    ->label('Quantidade de Arquivos')
+//                    ->getStateUsing(function ($record) {
+//                        return $record->files_count;
+//                    })
+//                    ->sortable(),
+//                TextColumn::make('files_size')
+//                    ->label('Tamanho dos Arquivos')
+//                    ->getStateUsing(function ($record) {
+//                        $size = function ($size) {
+//                            if ($size < 1000000) {
+//                                return Number::format($size / 1000, 2) . ' KB';
+//                            }
+//                            if ($size < 1000000000) {
+//                                return Number::format($size / 1000000, 2) . ' MB';
+//                            }
+//                            return Number::format($size / 1000000000, 2) . ' GB';
+//                        };
+//                        return $size($record->files_size);
+//                    })
+//                    ->sortable(),
+                TextColumn::make('created_at')
+                    ->label('Data de criação')
                     ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->searchable()
+                    ->dateTime('d/m/Y H:i')
                     ->sortable(),
             ])
             ->filters([

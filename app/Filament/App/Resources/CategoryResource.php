@@ -32,13 +32,13 @@ class CategoryResource extends Resource
             ->columns(1)
             ->schema([
                 Forms\Components\TextInput::make('name')
-                    ->label('Name')
+                    ->label('Nome')
                     ->required()
-                    ->placeholder('Enter the name of the category'),
+                    ->placeholder('Insira o nome da categoria'),
                 Forms\Components\Textarea::make('description')
-                    ->label('Description')
+                    ->label('Descrição')
                     ->required()
-                    ->placeholder('Enter the description of the category'),
+                    ->placeholder('Insira a descrição da categoria'),
                 Forms\Components\Hidden::make('user_id')
                     ->default(auth()->id()),
             ]);
@@ -49,17 +49,14 @@ class CategoryResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('description')
+                    ->description(fn (Category $record) => $record->description)
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->dateTime('d/m/Y H:i'),
+
             ])
             ->filters([
                 //

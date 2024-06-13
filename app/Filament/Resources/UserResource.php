@@ -72,7 +72,6 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('email')
                     ->searchable()
                     ->sortable(),
-                //show roles
                 Tables\Columns\TextColumn::make('roles.name')
                     ->badge()
                     ->searchable()

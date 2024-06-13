@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->text('description')->nullable();
             $table->boolean('should_notify')->default(false);
             $table->dateTime('notify_at')->nullable();
+            $table->dateTime('expiration_date')->nullable();
             $table->json('emails_to_notify')->nullable();
             $table->foreignId('category_id')->constrained();
             $table->foreignId('subcategory_id')->constrained();

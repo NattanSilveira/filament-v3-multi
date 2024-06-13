@@ -32,21 +32,21 @@ class SubcategoryResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
-                    ->label('Name')
+                    ->label('Nome')
                     ->required()
-                    ->placeholder('Enter the name of the category')
+                    ->placeholder('Insira o nome da subcategoria')
                     ->columnSpanFull(),
                 Forms\Components\Select::make('category_id')
-                    ->label('Category')
+                    ->label('Categoria')
                     ->options(
                         Category::all()->pluck('name', 'id')
                     )
                     ->required()
                     ->columnSpanFull(),
                 Forms\Components\Textarea::make('description')
-                    ->label('Description')
+                    ->label('Descrição')
                     ->required()
-                    ->placeholder('Enter the description of the category')
+                    ->placeholder('Insira a descrição da subcategoria')
                     ->columnSpanFull(),
                 Forms\Components\Hidden::make('user_id')
                     ->default(auth()->id()),
@@ -58,16 +58,13 @@ class SubcategoryResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('description')
+                    ->label('Nome')
+                    ->description(fn (Subcategory $record) => $record->description)
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->searchable()
+                    ->dateTime('d/m/Y H:i')
                     ->sortable(),
             ])
             ->filters([
