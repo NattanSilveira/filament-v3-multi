@@ -11,12 +11,12 @@ RUN apt-get update && apt-get install -y \
     curl \
     git \
     libonig-dev \
-    supervisor \
     gnupg2 \
     nodejs \
     npm \
     libicu-dev \
-    libjpeg62-turbo-dev
+    libjpeg62-turbo-dev \
+    cron  # Instala o cron
 
 # Instala o Yarn
 RUN npm install --global yarn
@@ -27,7 +27,6 @@ RUN docker-php-ext-install gd pdo pdo_mysql zip mbstring exif intl
 
 # Atualiza os pacotes PECL
 RUN pecl channel-update pecl.php.net
-
 
 # Limpa cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -43,4 +42,5 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY startup.sh /startup.sh
 RUN chmod +x /startup.sh
 
+# Inicia o startup.sh
 CMD ["/startup.sh"]

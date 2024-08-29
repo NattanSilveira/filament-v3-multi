@@ -9,10 +9,14 @@ echo "Executando yarn run build..."
 cd /var/www || exit
 yarn run build
 
-# Coloque aqui sua lógica para esperar por serviços externos, se necessário
+# Adiciona os cron jobs
+echo "Configurando cron jobs..."
+(crontab -l 2>/dev/null; echo "* * * * * cd /var/www && php artisan schedule:run >> /dev/null 2>&1") | crontab -
+(crontab -l 2>/dev/null; echo "* * * * * cd /var/www && php artisan queue:work --stop-when-empty >> /dev/null 2>&1") | crontab -
 
-# Executa migrações do Laravel
-#php /var/www/artisan migrate --force
+# Inicia o cron
+echo "Iniciando o cron..."
+service cron start
 
-# Inicializa o Supervisor para gerenciar os serviços
-exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+# Roda o supervisor ou qualquer outro serviço que precise ser iniciado
+exec "$@"

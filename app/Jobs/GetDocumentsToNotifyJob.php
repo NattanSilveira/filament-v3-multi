@@ -23,7 +23,6 @@ class GetDocumentsToNotifyJob implements ShouldQueue
 
     public function handle(): void
     {
-        Log::info('GetDocumentsToNotifyJob started');
         $documents = Document::where('should_notify', true)
             ->whereDate('notify_at', now())
             ->get();

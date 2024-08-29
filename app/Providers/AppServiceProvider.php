@@ -9,6 +9,7 @@ use Spatie\Health\Checks\Checks\DebugModeCheck;
 use Spatie\Health\Checks\Checks\EnvironmentCheck;
 use Spatie\Health\Checks\Checks\OptimizedAppCheck;
 use Spatie\Health\Checks\Checks\QueueCheck;
+use Spatie\Health\Checks\Checks\ScheduleCheck;
 use Spatie\Health\Checks\Checks\UsedDiskSpaceCheck;
 use Spatie\Health\Facades\Health;
 
@@ -36,7 +37,8 @@ class AppServiceProvider extends ServiceProvider
             UsedDiskSpaceCheck::new()
                 ->warnWhenUsedSpaceIsAbovePercentage(60)
                 ->failWhenUsedSpaceIsAbovePercentage(80),
-            QueueCheck::new(),
+//            QueueCheck::new(),
+//            ScheduleCheck::new(),
         ]);
     }
 }
