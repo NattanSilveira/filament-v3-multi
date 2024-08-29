@@ -13,10 +13,8 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     supervisor \
     gnupg2 \
-    # Adiciona o Node.js e o Yarn
     nodejs \
     npm \
-    # Adiciona as dependências para intl e exif
     libicu-dev \
     libjpeg62-turbo-dev
 
@@ -27,8 +25,9 @@ RUN npm install --global yarn
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
 RUN docker-php-ext-install gd pdo pdo_mysql zip mbstring exif intl
 
-# Instala Redis
-RUN pecl install redis && docker-php-ext-enable redis
+# Atualiza os pacotes PECL
+RUN pecl channel-update pecl.php.net
+
 
 # Limpa cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*

@@ -1,12 +1,8 @@
 <?php
 
 use App\Jobs\GetDocumentsToNotifyJob;
-use Illuminate\Foundation\Inspiring;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
-
-//Artisan::command('inspire', function () {
-//    $this->comment(Inspiring::quote());
-//})->purpose('Display an inspiring quote')->hourly();
+use Spatie\Health\Commands\DispatchQueueCheckJobsCommand;
 
 Schedule::job(GetDocumentsToNotifyJob::class)->everyTenSeconds();
+Schedule::command(DispatchQueueCheckJobsCommand::class)->everyMinute();
