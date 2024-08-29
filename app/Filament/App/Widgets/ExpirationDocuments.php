@@ -15,12 +15,12 @@ class ExpirationDocuments extends BaseWidget
     protected static ?int $sort = 2;
 
     //change header
-    protected static ?string $heading = 'Documentos próximos ao vencimento';
+    protected static ?string $heading = 'Documentos a vencer nos próximos 7 dias';
 
     public function table(Table $table): Table
     {
         return $table
-            ->query(DocumentResource::getEloquentQuery()->where('should_notify', true)->where('expiration_date', '>=', now()->addDays(7)))
+            ->query(DocumentResource::getEloquentQuery()->where('expiration_date', '<=', now()->addDays(7)))
             ->defaultPaginationPageOption(5)
             ->columns([
                 Tables\Columns\TextColumn::make('name')

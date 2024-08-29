@@ -11,6 +11,7 @@ use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
@@ -130,5 +131,15 @@ class User extends Authenticatable implements FilamentUser
             return $this->hasRole(config('filament-shield.app_user.name')) || $this->hasRole(config('filament-shield.super_admin.name'));
         }
         return false;
+    }
+
+    public function hasSubscription(): bool
+    {
+        return $this->subscription()->exists();
+    }
+
+    public function subscription(): HasOne
+    {
+        return $this->hasOne(Subscription::class);
     }
 }

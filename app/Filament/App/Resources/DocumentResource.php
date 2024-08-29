@@ -122,6 +122,39 @@ class DocumentResource extends Resource
                     ->label('Nome')
                     ->searchable()
                     ->sortable(),
+
+                TextColumn::make('category.name')
+                    ->label('Categoria')
+                    ->searchable()
+                    ->limit(10)
+                    ->tooltip(function (TextColumn $column): ?string {
+                        $state = $column->getState();
+
+                        if (strlen($state) <= $column->getCharacterLimit()) {
+                            return null;
+                        }
+
+                        // Only render the tooltip if the column content exceeds the length limit.
+                        return $state;
+                    })
+                    ->sortable(),
+
+                TextColumn::make('subcategory.name')
+                    ->label('Subcategoria')
+                    ->searchable()
+                    ->limit(10)
+                    ->tooltip(function (TextColumn $column): ?string {
+                        $state = $column->getState();
+
+                        if (strlen($state) <= $column->getCharacterLimit()) {
+                            return null;
+                        }
+
+                        // Only render the tooltip if the column content exceeds the length limit.
+                        return $state;
+                    })
+                    ->sortable(),
+
                 IconColumn::make('should_notify')
                     ->label('Notificação')
                     ->trueColor('success')
@@ -132,6 +165,42 @@ class DocumentResource extends Resource
                     ->searchable()
                     ->dateTime('d/m/Y H:i')
                     ->sortable(),
+
+                TextColumn::make('status')
+                    ->label('Dias restantes')
+                    ->badge()
+                    ->color(function ($record) {
+                        $expirationDate = $record->expiration_date;
+                        if ($expirationDate) {
+                            $daysLeft = (int) now()->diffInDays($expirationDate, false);
+                            if ($daysLeft < 0) {
+                                return 'danger'; // Vencido
+                            }
+                            if ($daysLeft == 0) {
+                                return 'warning'; // Vence hoje
+                            }
+                            return 'success'; // A vencer
+                        }
+                        return 'gray'; // Sem data de vencimento
+                    })
+                    ->getStateUsing(function ($record) {
+                        $expirationDate = $record->expiration_date;
+                        if ($expirationDate) {
+                            $daysLeft = (int) now()->diffInDays($expirationDate, false);
+                            if ($daysLeft < 0) {
+                                return abs($daysLeft) . ' dias vencido';
+                            }
+                            if ($daysLeft == 0) {
+                                return 'Vence hoje';
+                            }
+                            return $daysLeft . ' dias a vencer';
+                        }
+                        return 'Sem data de vencimento';
+                    })
+                    ->sortable(),
+
+
+
 //                TextColumn::make('files_count')
 //                    ->label('Quantidade de Arquivos')
 //                    ->getStateUsing(function ($record) {
