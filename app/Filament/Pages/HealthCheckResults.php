@@ -2,8 +2,6 @@
 
 namespace App\Filament\Pages;
 
-use Filament\Pages\Page;
-
 use ShuvroRoy\FilamentSpatieLaravelHealth\Pages\HealthCheckResults as BaseHealthCheckResults;
 
 class HealthCheckResults extends BaseHealthCheckResults
