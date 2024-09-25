@@ -12,7 +12,6 @@ return new class extends Migration {
             $table->foreignId('subscription_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('plan_id')->constrained();
-            $table->foreignId('order_id')->constrained();
             $table->integer('price');
             $table->integer('paid_amount');
             $table->string('status');
