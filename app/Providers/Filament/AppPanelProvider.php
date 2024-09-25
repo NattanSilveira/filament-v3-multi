@@ -44,7 +44,12 @@ class AppPanelProvider extends PanelProvider
             ->profile()
             ->login()
             ->colors([
-                'primary' => Color::Amber,
+                'danger' => Color::Rose,
+                'gray' => Color::Gray,
+                'info' => Color::Blue,
+                'primary' => Color::Indigo,
+                'success' => Color::Emerald,
+                'warning' => Color::Orange,
             ])
 //            ->navigation(function (NavigationBuilder $builder): NavigationBuilder {
 //                return $builder->groups([
